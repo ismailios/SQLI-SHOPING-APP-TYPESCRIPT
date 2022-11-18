@@ -1,13 +1,19 @@
 export type Product = {
     id: number,
-    name: string,
-    imageSrc: string,
+    title: string,
+    image: string,
     price: number,
-    color: string,
     description: string,
-    isFav: boolean
+    isFav?: boolean,
+    category: string,
+    rating: Rating
+
 };
 
+type Rating = {
+    count: number,
+    rate: number,
+}
 
 export type Cart = {
     id: number;
@@ -16,6 +22,7 @@ export type Cart = {
     total: number
 
 };
+
 
 
 

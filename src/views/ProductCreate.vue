@@ -5,14 +5,14 @@
     <div class="w-full max-w-md space-y-8">
       <form class="mt-8 space-y-6" @submit.prevent="createProduct">
         <div>
-          <label for="name">Name</label>
+          <label for="name">Title</label>
           <input
-            id="name"
-            name="name"
+            id="title"
+            name="title"
             type="text"
-            v-model="FormInputs.name"
+            v-model="FormInputs.title"
             class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-            placeholder="Product Name"
+            placeholder="Product Title"
           />
         </div>
         <div>
@@ -30,7 +30,7 @@
         <div>
           <label for="price">Color</label>
           <select
-            v-model="FormInputs.color"
+            v-model="FormInputs.category"
             class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
           >
             <option value="black">Black</option>
@@ -75,11 +75,15 @@ const generateId = Math.floor(Math.random() * 100);
 
 const FormInputs: Product = reactive({
   id: generateId,
-  name: "",
+  title: "",
   price: 0,
-  color: "",
-  imageSrc: `https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-04.jpg`,
+  category: "",
+  image: `https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-04.jpg`,
   description: "",
+  rating: {
+    count: 10,
+    rate: 8.6,
+  },
   isFav: false,
 });
 

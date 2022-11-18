@@ -5,28 +5,34 @@ import { Product, Cart } from '../types'
 type StateShape = {
   products: Product[],
   cart: Cart[],
+
 }
 
 export default createStore({
   state: (): StateShape => ({
-    products: products,
-    cart: []
+    products: [],
+    cart: [],
+
   }),
   getters: {
     getWishlistProducts(state) {
       return state.products.filter((product) => product.isFav)
     },
-    getCartCounter(state) {
+    getCartCounter(state): number {
       return state.cart.length
     },
-    getCartItems(state) {
+    getCartItems(state): Cart[] {
       return state.cart
     },
-    getTotalItems(state) {
-      return state.cart.reduce((acc, curr) => acc += curr.total, 0)
+    getTotalItems(state): number {
+      return state.cart.reduce((acc, curr) => acc + curr.total, 0)
     }
   },
   mutations: {
+    updateProducts(state, data: Product[]) {
+      state.products = data
+
+    },
     createProduct(state, product: Product) {
       state.products.push(product)
     },
@@ -53,9 +59,30 @@ export default createStore({
     },
     removeItemFromCart(state, cartId) {
       state.cart = state.cart.filter((cart) => cart.id !== cartId)
+    },
+    updateTotal(state, cartItemId: number) {
+      const updatedCart = state.cart.find((cart) => cart.id == cartItemId)
+      if (!updatedCart) {
+        return
+      }
+      updatedCart.total = updatedCart.product.price * updatedCart.quantity
+
     }
+
   },
   actions: {
+    async getProductsData({ commit }) {
+      try {
+        const response = await fetch("https://fakestoreapi.com/products")
+        const data = await response.json()
+        console.log(data)
+        commit("updateProducts", data)
+
+      } catch (error) {
+        console.error(error)
+      }
+
+    }
   },
   modules: {
   }

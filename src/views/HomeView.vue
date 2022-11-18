@@ -1,5 +1,7 @@
 <template>
-  <ProductList :products="products" />
+  <div>
+    <ProductList :products="products" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -8,6 +10,8 @@ import { useStore } from "vuex";
 import ProductList from "@/components/ProductList.vue";
 
 const store = useStore();
+
+store.dispatch("getProductsData");
 
 const products = computed(() => store.state.products);
 </script>

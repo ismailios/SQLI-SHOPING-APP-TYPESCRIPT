@@ -1,10 +1,15 @@
+import store from '@/store'
+import { Product } from '@/types'
+import NProgress from 'nprogress'
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
-import ProductShow from '@/views/ProductShow.vue'
-import ProductCreate from '@/views/ProductCreate.vue'
-import WishlistView from '@/views/WishlistView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
-import CartView from '@/views/CartView.vue'
+const HomeView = () => import('@/views/HomeView.vue')
+const ProductShow = () => import('@/views/ProductShow.vue')
+const ProductCreate = () => import('@/views/ProductCreate.vue')
+const WishlistView = () => import('@/views/WishlistView.vue')
+const NotFoundView = () => import('@/views/NotFoundView.vue')
+const CartView = () => import('@/views/CartView.vue')
+
+
 const routes: Array<RouteRecordRaw> = [
   {
     name: "Home",
@@ -15,7 +20,26 @@ const routes: Array<RouteRecordRaw> = [
     name: "ProductShow",
     path: "/productShow/:id",
     component: ProductShow,
-    props: true
+    props: true,
+    async beforeEnter(to, from, next) {
+
+      await store.dispatch("getProductsData")
+      const threadExists = store.state.products.find(
+        (product: Product) => product.id.toString() == to.params.id
+      )
+      if (threadExists) {
+        return next()
+      } else {
+        next({
+          name: 'NotFound',
+          params: { pathMatch: to.path.substring(1).split('/') },
+          query: to.query,
+          hash: to.hash
+        })
+      }
+
+    }
+
   },
   {
     name: "ProductCreate",
@@ -42,6 +66,20 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeResolve((to, from, next) => {
+  // If this isn't an initial page load.
+  if (to.name) {
+    // Start the route progress bar.
+    NProgress.start()
+  }
+  next()
+})
+
+router.afterEach((to, from) => {
+  // Complete the animation of the route progress bar.
+  NProgress.done()
 })
 
 export default router

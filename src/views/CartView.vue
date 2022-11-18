@@ -13,38 +13,38 @@
                 <tr>
                   <th
                     scope="col"
-                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                    class="text-center text-sm font-medium text-gray-900 px-6 py-4"
                   >
                     Product image
                   </th>
                   <th
                     scope="col"
-                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                    class="text-center text-sm font-medium text-gray-900 px-6 py-4"
                   >
                     Product name
                   </th>
                   <th
                     scope="col"
-                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                    class="text-center text-sm font-medium text-gray-900 px-6 py-4"
                   >
                     Price
                   </th>
 
                   <th
                     scope="col"
-                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                    class="text-center text-sm font-medium text-gray-900 px-6 py-4"
                   >
                     Quantity
                   </th>
                   <th
                     scope="col"
-                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                    class="text-center text-sm font-medium text-gray-900 px-6 py-4"
                   >
                     Total
                   </th>
                   <th
                     scope="col"
-                    class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                    class="text-center text-sm font-medium text-gray-900 px-6 py-4"
                   >
                     Remove
                   </th>
@@ -53,32 +53,40 @@
               <tbody>
                 <tr v-for="cartItem in cartItems" :key="cartItem.id" class="">
                   <td
-                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    class="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                   >
-                    <img :src="cartItem.product.imageSrc" alt="" class="w-20" />
+                    <img :src="cartItem.product.image" alt="" class="w-20" />
                   </td>
                   <td
-                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    class="text-center px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                   >
-                    {{ cartItem.product.name }}
+                    {{ cartItem.product.title }}
                   </td>
                   <td
-                    class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                    class="text-center text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
                   >
-                    $ {{ cartItem.product.price }}
+                    $ {{ formattedPrice(cartItem.product.price) }}
                   </td>
                   <td
-                    class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                    class="text-center text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
                   >
-                    * {{ cartItem.quantity }}
+                    <input
+                      id="quantity"
+                      name="quantity"
+                      min="1"
+                      type="number"
+                      v-model="cartItem.quantity"
+                      @change="handleQuantity(cartItem.id)"
+                      class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                    />
                   </td>
                   <td
-                    class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                    class="text-center text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
                   >
-                    $ {{ cartItem.total }}
+                    $ {{ formattedPrice(cartItem.total) }}
                   </td>
                   <td
-                    class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                    class="text-center text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
                   >
                     <button @click="removeItemFromCart(cartItem.id)">
                       <TrashIcon
@@ -93,8 +101,8 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td colspan="4" class="font-black">
-                    Total : ${{ totalItems }}
+                  <td colspan="5" class="font-black">
+                    Total : ${{ formattedPrice(totalItems) }}
                   </td>
                 </tr>
               </tbody>
@@ -109,12 +117,21 @@
 
 <script setup lang="ts">
 import { TrashIcon } from "@heroicons/vue/24/outline";
-import { computed } from "@vue/runtime-core";
+import { computed, ref } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
 const store = useStore();
 const cartItems = computed(() => store.getters.getCartItems);
 const totalItems = computed(() => store.getters.getTotalItems);
+
+function handleQuantity(cartItemId: number) {
+  store.commit("updateTotal", cartItemId);
+}
+
+//TODO :  EXTRA
+function formattedPrice(price: number) {
+  return price.toFixed(2);
+}
 
 function removeItemFromCart(cartId: number) {
   store.commit("removeItemFromCart", cartId);
