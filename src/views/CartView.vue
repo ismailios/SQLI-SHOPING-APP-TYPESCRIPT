@@ -117,8 +117,9 @@
 
 <script setup lang="ts">
 import { TrashIcon } from "@heroicons/vue/24/outline";
-import { computed, ref } from "@vue/runtime-core";
-import { useStore } from "vuex";
+import { computed } from "@vue/runtime-core";
+import { useStore } from "@/store";
+import { formattedPrice } from "@/helpers";
 
 const store = useStore();
 const cartItems = computed(() => store.getters.getCartItems);
@@ -126,11 +127,6 @@ const totalItems = computed(() => store.getters.getTotalItems);
 
 function handleQuantity(cartItemId: number) {
   store.commit("updateTotal", cartItemId);
-}
-
-//TODO :  EXTRA
-function formattedPrice(price: number) {
-  return price.toFixed(2);
 }
 
 function removeItemFromCart(cartId: number) {

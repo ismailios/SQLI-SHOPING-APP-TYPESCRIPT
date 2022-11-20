@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed } from "@vue/runtime-core";
-import { useStore } from "vuex";
+import { useStore } from "@/store";
 import ProductList from "@/components/ProductList.vue";
 
 const store = useStore();

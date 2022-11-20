@@ -1,5 +1,5 @@
-import products from '@/mokup/products'
-import { createStore } from 'vuex'
+import { InjectionKey } from 'vue'
+import { createStore, Store, useStore as baseUseStore, } from 'vuex'
 import { Product, Cart } from '../types'
 
 type StateShape = {
@@ -8,12 +8,16 @@ type StateShape = {
 
 }
 
-export default createStore({
-  state: (): StateShape => ({
+export const key: InjectionKey<Store<StateShape>> = Symbol()
+export function useStore() {
+  return baseUseStore(key)
+}
+
+export default createStore<StateShape>({
+  state: {
     products: [],
     cart: [],
-
-  }),
+  },
   getters: {
     getWishlistProducts(state) {
       return state.products.filter((product) => product.isFav)
@@ -75,7 +79,6 @@ export default createStore({
       try {
         const response = await fetch("https://fakestoreapi.com/products")
         const data = await response.json()
-        console.log(data)
         commit("updateProducts", data)
 
       } catch (error) {

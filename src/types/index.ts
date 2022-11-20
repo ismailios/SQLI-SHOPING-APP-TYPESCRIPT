@@ -22,7 +22,10 @@ export type Cart = {
     total: number
 
 };
-
+export type FilterInput = {
+    category: string;
+    search: string;
+};
 
 
 

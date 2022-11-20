@@ -66,7 +66,7 @@
 import { Product } from "@/types";
 import { reactive } from "@vue/reactivity";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import { useStore } from "@/store";
 
 const store = useStore();
 const router = useRouter();

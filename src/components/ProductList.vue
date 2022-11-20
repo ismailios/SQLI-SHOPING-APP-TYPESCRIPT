@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { Product } from "@/types";
 
-import { useStore } from "vuex";
+import { useStore } from "@/store";
 import ProductItem from "./ProductItem.vue";
 
 defineProps<{ products: Product[] }>();

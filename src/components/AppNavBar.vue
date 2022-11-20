@@ -43,10 +43,10 @@
 </template>
 
 <script setup lang="ts">
+import { useStore } from "@/store";
 import { Disclosure } from "@headlessui/vue";
 import { ShoppingCartIcon } from "@heroicons/vue/24/outline";
 import { computed } from "@vue/runtime-core";
-import { useStore } from "vuex";
 
 const store = useStore();
 

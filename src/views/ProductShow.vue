@@ -58,7 +58,7 @@
 <script setup lang="ts">
 import { Product } from "@/types";
 import { computed } from "@vue/runtime-core";
-import { useStore } from "vuex";
+import { useStore } from "@/store";
 const store = useStore();
 const props = defineProps<{ id: string }>();
 

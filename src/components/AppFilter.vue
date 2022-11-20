@@ -62,23 +62,19 @@
 </template>
 
 <script setup lang="ts">
+import { useStore } from "@/store";
+import { FilterInput } from "@/types";
 import { reactive } from "@vue/reactivity";
 
-type Filter = {
-  category: string;
-  search: string;
-};
-const emit = defineEmits<{
-  (e: "filter-product", formFilters: Filter): void;
-}>();
+const store = useStore();
 
-const formFilters: Filter = reactive({
+const formFilters: FilterInput = reactive({
   category: "",
   search: "",
 });
 
 function handleFilter() {
-  emit("filter-product", formFilters);
+  store.commit("filterProducts", formFilters);
 }
 </script>
 
